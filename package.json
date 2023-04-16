@@ -1,0 +1,26 @@
+{
+  "name": "new-project-template",
+  "version": "1.0.0",
+  "description": "This template includes ESLint & Prettier for Javascript and comes with HTML, CSS, and JS files to get started.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kuneus/new-project-template.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kuneus/new-project-template/issues"
+  },
+  "homepage": "https://github.com/kuneus/new-project-template#readme",
+  "devDependencies": {
+    "eslint": "^8.37.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-import": "^2.27.5",
+    "prettier": "2.8.7"
+  }
+}
