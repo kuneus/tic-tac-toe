@@ -1,27 +1,121 @@
 const cells = document.getElementsByClassName('cell');
 
-for (let i = 0; i < cells.length; i += 1) {
-  cells[i].addEventListener('click', function () {
-    cells[i].textContent = 'x';
-    gameboardObj.gameboard[i] = 'x';
-  });
-}
-
 const gameboardObj = {
-  // gameboard to contain room for 9 cells
-  // need to match gameboard array with each cell
-  gameboard: [null, null, null, null, null, null, null, null, null], // push player's mark to array with each turn
-};
-
-const playerObj = {
-  // player 1 or 2
-  // mark is X or O
-  // player 2 is opposite
+  gameboard: [null, null, null, null, null, null, null, null, null],
+  turn: 0,
+  getCurrentTurn: () => {
+    if (gameboardObj.turn === 0) {
+      return playerOne.playerName;
+    } else if (gameboardObj.turn % 2 !== 0) {
+      return playerTwo.playerName;
+    } else if (gameboardObj.turn % 2 === 0) {
+      return playerOne.playerName;
+    }
+  },
+  addTurn: () => {
+    gameboardObj.turn++;
+  },
+  checkWinner: () => {
+    // logic for checking for winner
+    if (
+      (gameboardObj.gameboard[0] === 'X' &&
+        gameboardObj.gameboard[1] === 'X' &&
+        gameboardObj.gameboard[2] === 'X') ||
+      (gameboardObj.gameboard[3] === 'X' &&
+        gameboardObj.gameboard[4] === 'X' &&
+        gameboardObj.gameboard[5] === 'X') ||
+      (gameboardObj.gameboard[6] === 'X' &&
+        gameboardObj.gameboard[7] === 'X' &&
+        gameboardObj.gameboard[8] === 'X') ||
+      (gameboardObj.gameboard[0] === 'X' &&
+        gameboardObj.gameboard[3] === 'X' &&
+        gameboardObj.gameboard[6] === 'X') ||
+      (gameboardObj.gameboard[1] === 'X' &&
+        gameboardObj.gameboard[4] === 'X' &&
+        gameboardObj.gameboard[7] === 'X') ||
+      (gameboardObj.gameboard[2] === 'X' &&
+        gameboardObj.gameboard[5] === 'X' &&
+        gameboardObj.gameboard[8] === 'X') ||
+      (gameboardObj.gameboard[0] === 'X' &&
+        gameboardObj.gameboard[4] === 'X' &&
+        gameboardObj.gameboard[8] === 'X') ||
+      (gameboardObj.gameboard[2] === 'X' &&
+        gameboardObj.gameboard[4] === 'X' &&
+        gameboardObj.gameboard[6] === 'X')
+    ) {
+      console.log('player 1 wins!');
+    } else if (
+      (gameboardObj.gameboard[0] === 'O' &&
+        gameboardObj.gameboard[1] === 'O' &&
+        gameboardObj.gameboard[2] === 'O') ||
+      (gameboardObj.gameboard[3] === 'O' &&
+        gameboardObj.gameboard[4] === 'O' &&
+        gameboardObj.gameboard[5] === 'O') ||
+      (gameboardObj.gameboard[6] === 'O' &&
+        gameboardObj.gameboard[7] === 'O' &&
+        gameboardObj.gameboard[8] === '') ||
+      (gameboardObj.gameboard[0] === 'O' &&
+        gameboardObj.gameboard[3] === 'O' &&
+        gameboardObj.gameboard[6] === 'O') ||
+      (gameboardObj.gameboard[1] === 'O' &&
+        gameboardObj.gameboard[4] === 'O' &&
+        gameboardObj.gameboard[7] === 'O') ||
+      (gameboardObj.gameboard[2] === 'O' &&
+        gameboardObj.gameboard[5] === 'O' &&
+        gameboardObj.gameboard[8] === 'O') ||
+      (gameboardObj.gameboard[0] === 'O' &&
+        gameboardObj.gameboard[4] === 'O' &&
+        gameboardObj.gameboard[8] === 'O') ||
+      (gameboardObj.gameboard[2] === 'O' &&
+        gameboardObj.gameboard[4] === 'O' &&
+        gameboardObj.gameboard[6] === 'O')
+    ) {
+      console.log('player 2 wins!');
+    }
+  },
 };
 
 const playerFactory = (playerName, mark) => {
   return { playerName, mark };
 };
+
+const playerOne = playerFactory('player1', 'X');
+const playerTwo = playerFactory('player2', 'O');
+
+// event listener loop for each grid cell
+for (let i = 0; i < cells.length; i++) {
+  cells[i].addEventListener('click', function () {
+    // to prevent clicking on a cell more than once
+    if (cells[i].textContent !== '') {
+      return;
+    } else {
+      // prevent further action once all cells have been occupied
+      if (gameboardObj.turn === 9) {
+        return;
+      } else if (gameboardObj.turn % 2 === 0) {
+        // sets even turns and first turn as 'X'
+        cells[i].textContent = 'X';
+        gameboardObj.gameboard[i] = 'X';
+        gameboardObj.addTurn();
+      } else if (gameboardObj.turn % 2 !== 0) {
+        // sets all odd turns as 'O'
+        cells[i].textContent = 'O';
+        gameboardObj.gameboard[i] = 'O';
+        gameboardObj.addTurn();
+      }
+
+      gameboardObj.checkWinner();
+
+      //execute function to check if winner with each click
+    }
+
+    // logic for checking for winner after each click
+    // if 3 in a row horizontally, vertically, or diagonally, stop game
+    // announce winner
+    // if turns === 9, end game in tie
+    // logic for preventing clicking in same box
+  });
+}
 
 /* pseudocode
 
