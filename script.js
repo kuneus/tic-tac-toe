@@ -2,6 +2,48 @@ const cells = document.getElementsByClassName('cell');
 
 const gameboardObj = {
   gameboard: [null, null, null, null, null, null, null, null, null],
+  setWinningConditions: (num, mark) => {
+    // array is defined and returned in order to evaluate
+    // truthiness of each winning combination
+    // each combination also checks for a single matching cell's text content
+    // to determine which mark is placed within the winning combination
+    const winningConditions = [
+      gameboardObj.gameboard[0] === gameboardObj.gameboard[1] &&
+        gameboardObj.gameboard[1] === gameboardObj.gameboard[2] &&
+        gameboardObj.gameboard[2] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[3] === gameboardObj.gameboard[4] &&
+        gameboardObj.gameboard[4] === gameboardObj.gameboard[5] &&
+        gameboardObj.gameboard[5] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[6] === gameboardObj.gameboard[7] &&
+        gameboardObj.gameboard[7] === gameboardObj.gameboard[8] &&
+        gameboardObj.gameboard[8] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[0] === gameboardObj.gameboard[3] &&
+        gameboardObj.gameboard[3] === gameboardObj.gameboard[6] &&
+        gameboardObj.gameboard[6] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[1] === gameboardObj.gameboard[4] &&
+        gameboardObj.gameboard[4] === gameboardObj.gameboard[7] &&
+        gameboardObj.gameboard[7] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[2] === gameboardObj.gameboard[5] &&
+        gameboardObj.gameboard[5] === gameboardObj.gameboard[8] &&
+        gameboardObj.gameboard[8] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[0] === gameboardObj.gameboard[4] &&
+        gameboardObj.gameboard[4] === gameboardObj.gameboard[8] &&
+        gameboardObj.gameboard[8] !== null &&
+        cells[num].textContent === mark,
+      gameboardObj.gameboard[2] === gameboardObj.gameboard[4] &&
+        gameboardObj.gameboard[4] === gameboardObj.gameboard[6] &&
+        gameboardObj.gameboard[6] !== null &&
+        cells[num].textContent === mark,
+    ];
+
+    return winningConditions;
+  },
   turn: 0,
   getCurrentTurn: () => {
     if (gameboardObj.turn === 0) {
@@ -15,62 +57,101 @@ const gameboardObj = {
   addTurn: () => {
     gameboardObj.turn++;
   },
+  gameover: false,
+  playerOneWin: false,
+  playerTwoWin: false,
+  // setPlayerOneWin: () => {
+  //   gameboardObj.playerOneWin = true;
+  //   gameboardObj.gameover = true;
+  //   console.log('player 1 wins!!!11!');
+  // },
+  setPlayerTwoWin: () => {
+    gameboardObj.playerTwoWin = true;
+    gameboardObj.gameover = true;
+    console.log('player 2 wins!!!@!@!');
+  },
+  setPlayerOneWin: (arg, a, b, c) => {
+    // use arg playerOne or playerTwo
+    if (arg === 'p1') {
+      gameboardObj.playerOneWin = true;
+      console.log('Player 1 wins!!!11!');
+    } else if (arg === 'p2') {
+      gameboardObj.playerTwoWin = true;
+      console.log('Player 2 wins!!!11!');
+    }
+
+    gameboardObj.gameover = true;
+    cells[a].style.backgroundColor = 'gray';
+    cells[b].style.backgroundColor = 'gray';
+    cells[c].style.backgroundColor = 'gray';
+  },
   checkWinner: () => {
-    // logic for checking for winner
+    // logic for checking for winning combination
     if (
-      (gameboardObj.gameboard[0] === 'X' &&
-        gameboardObj.gameboard[1] === 'X' &&
-        gameboardObj.gameboard[2] === 'X') ||
-      (gameboardObj.gameboard[3] === 'X' &&
-        gameboardObj.gameboard[4] === 'X' &&
-        gameboardObj.gameboard[5] === 'X') ||
-      (gameboardObj.gameboard[6] === 'X' &&
-        gameboardObj.gameboard[7] === 'X' &&
-        gameboardObj.gameboard[8] === 'X') ||
-      (gameboardObj.gameboard[0] === 'X' &&
-        gameboardObj.gameboard[3] === 'X' &&
-        gameboardObj.gameboard[6] === 'X') ||
-      (gameboardObj.gameboard[1] === 'X' &&
-        gameboardObj.gameboard[4] === 'X' &&
-        gameboardObj.gameboard[7] === 'X') ||
-      (gameboardObj.gameboard[2] === 'X' &&
-        gameboardObj.gameboard[5] === 'X' &&
-        gameboardObj.gameboard[8] === 'X') ||
-      (gameboardObj.gameboard[0] === 'X' &&
-        gameboardObj.gameboard[4] === 'X' &&
-        gameboardObj.gameboard[8] === 'X') ||
-      (gameboardObj.gameboard[2] === 'X' &&
-        gameboardObj.gameboard[4] === 'X' &&
-        gameboardObj.gameboard[6] === 'X')
+      // check setWinningConditions() for 'X'
+      gameboardObj.setWinningConditions(0, 'X')[0]
     ) {
-      console.log('player 1 wins!');
+      gameboardObj.setPlayerOneWin('p1', 0, 1, 2);
+    } else if (gameboardObj.setWinningConditions(3, 'X')[1]) {
+      gameboardObj.setPlayerOneWin('p1', 3, 4, 5);
+    } else if (gameboardObj.setWinningConditions(6, 'X')[2]) {
+      gameboardObj.setPlayerOneWin('p1', 6, 7, 8);
+    } else if (gameboardObj.setWinningConditions(0, 'X')[3]) {
+      gameboardObj.setPlayerOneWin('p1', 0, 3, 6);
+    } else if (gameboardObj.setWinningConditions(1, 'X')[4]) {
+      gameboardObj.setPlayerOneWin('p1', 1, 4, 7);
+    } else if (gameboardObj.setWinningConditions(2, 'X')[5]) {
+      gameboardObj.setPlayerOneWin('p1', 2, 5, 8);
+    } else if (gameboardObj.setWinningConditions(0, 'X')[6]) {
+      gameboardObj.setPlayerOneWin('p1', 0, 4, 8);
+    } else if (gameboardObj.setWinningConditions(2, 'X')[7]) {
+      gameboardObj.setPlayerOneWin('p1', 2, 4, 6);
     } else if (
-      (gameboardObj.gameboard[0] === 'O' &&
-        gameboardObj.gameboard[1] === 'O' &&
-        gameboardObj.gameboard[2] === 'O') ||
-      (gameboardObj.gameboard[3] === 'O' &&
-        gameboardObj.gameboard[4] === 'O' &&
-        gameboardObj.gameboard[5] === 'O') ||
-      (gameboardObj.gameboard[6] === 'O' &&
-        gameboardObj.gameboard[7] === 'O' &&
-        gameboardObj.gameboard[8] === '') ||
-      (gameboardObj.gameboard[0] === 'O' &&
-        gameboardObj.gameboard[3] === 'O' &&
-        gameboardObj.gameboard[6] === 'O') ||
-      (gameboardObj.gameboard[1] === 'O' &&
-        gameboardObj.gameboard[4] === 'O' &&
-        gameboardObj.gameboard[7] === 'O') ||
-      (gameboardObj.gameboard[2] === 'O' &&
-        gameboardObj.gameboard[5] === 'O' &&
-        gameboardObj.gameboard[8] === 'O') ||
-      (gameboardObj.gameboard[0] === 'O' &&
-        gameboardObj.gameboard[4] === 'O' &&
-        gameboardObj.gameboard[8] === 'O') ||
-      (gameboardObj.gameboard[2] === 'O' &&
-        gameboardObj.gameboard[4] === 'O' &&
-        gameboardObj.gameboard[6] === 'O')
+      // check setWinningConditions() for 'O'
+      gameboardObj.setWinningConditions(0, 'O')[0]
     ) {
-      console.log('player 2 wins!');
+      gameboardObj.setPlayerOneWin('p2', 0, 1, 2);
+    } else if (gameboardObj.setWinningConditions(3, 'O')[1]) {
+      gameboardObj.setPlayerOneWin('p2', 3, 4, 5);
+    } else if (gameboardObj.setWinningConditions(6, 'O')[2]) {
+      gameboardObj.setPlayerOneWin('p2', 6, 7, 8);
+    } else if (gameboardObj.setWinningConditions(0, 'O')[3]) {
+      gameboardObj.setPlayerOneWin('p2', 0, 3, 6);
+    } else if (gameboardObj.setWinningConditions(1, 'O')[4]) {
+      gameboardObj.setPlayerOneWin('p2', 1, 4, 7);
+    } else if (gameboardObj.setWinningConditions(2, 'O')[5]) {
+      gameboardObj.setPlayerOneWin('p2', 2, 5, 8);
+    } else if (gameboardObj.setWinningConditions(0, 'O')[6]) {
+      gameboardObj.setPlayerOneWin('p2', 0, 4, 8);
+    } else if (gameboardObj.setWinningConditions(2, 'O')[7]) {
+      gameboardObj.setPlayerOneWin('p2', 2, 4, 6);
+    }
+  },
+  // NOTE 4/18:  consider reducing above code by creating a function for setting
+  // bg color change and calling that function instead of writing it over and over again
+  // OR consider combining win conditions with respective bg color change into an object
+
+  resetGame: () => {
+    if (gameboardObj.gameover === true) {
+      gameboardObj.gameboard = [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      ];
+      Array.from(cells).forEach((cell) => {
+        cell.textContent = '';
+        cell.style.backgroundColor = 'black';
+      });
+      gameboardObj.gameover = false;
+      gameboardObj.turn = 0;
+      gameboardObj.playerOneWin = false;
+      gameboardObj.playerTwoWin = false;
     }
   },
 };
@@ -85,14 +166,17 @@ const playerTwo = playerFactory('player2', 'O');
 // event listener loop for each grid cell
 for (let i = 0; i < cells.length; i++) {
   cells[i].addEventListener('click', function () {
-    // to prevent clicking on a cell more than once
-    if (cells[i].textContent !== '') {
+    // to prevent clicking on a cell more than once, or pause the game if a winner
+    // has been declared or all cells are occupied
+    if (
+      cells[i].textContent !== '' ||
+      gameboardObj.gameover === true ||
+      gameboardObj.turn === 9
+    ) {
       return;
     } else {
       // prevent further action once all cells have been occupied
-      if (gameboardObj.turn === 9) {
-        return;
-      } else if (gameboardObj.turn % 2 === 0) {
+      if (gameboardObj.turn % 2 === 0) {
         // sets even turns and first turn as 'X'
         cells[i].textContent = 'X';
         gameboardObj.gameboard[i] = 'X';
@@ -105,17 +189,16 @@ for (let i = 0; i < cells.length; i++) {
       }
 
       gameboardObj.checkWinner();
-
-      //execute function to check if winner with each click
+      // gameboardObj.resetGame();
     }
 
-    // logic for checking for winner after each click
-    // if 3 in a row horizontally, vertically, or diagonally, stop game
     // announce winner
-    // if turns === 9, end game in tie
-    // logic for preventing clicking in same box
   });
 }
+
+const resetBtn = document.getElementById('reset-btn');
+
+resetBtn.addEventListener('click', gameboardObj.resetGame);
 
 /* pseudocode
 
@@ -179,7 +262,7 @@ another player
 
 // If you’re having trouble, Building a house from the inside out is a
 // great article that lays out a highly applicable example of how
-// you might organize your code for this project.
+// you might organize your code for gameboardObj project.
 // Build the logic that checks for when the game is over! Should check
 // for 3-in-a-row and a tie.
 
@@ -193,6 +276,6 @@ another player
 // Start by just getting the computer to make a random legal move.
 // Once you’ve gotten that, work on making the computer smart. It is
 // possible to create an unbeatable AI using the minimax algorithm
-// (read about it here, some googling will help you out with this one)
-// If you get this running definitely come show it off in the chatroom.
+// (read about it here, some googling will help you out with gameboardObj one)
+// If you get gameboardObj running definitely come show it off in the chatroom.
 // It’s quite an accomplishment!

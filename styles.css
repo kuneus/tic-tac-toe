@@ -107,6 +107,7 @@ body {
 
 #main {
   display: flex;
+  flex-direction: column;
   height: 50vw;
   width: 50vw;
 }
