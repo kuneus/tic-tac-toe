@@ -7,31 +7,27 @@ const gameboardObj = {
   setWinningConditions: (arrNum1, arrNum2, arrNum3) => {
     // array is defined and returned in order to evaluate
     // truthiness of winning combination
-    // each combination also checks for a single matching cell's text content
-    // to determine which mark is placed within the winning combination
-
     const winningConditions = [
-      // check truthiness of winning combo with X
       gameboardObj.gameboard[arrNum1] === gameboardObj.gameboard[arrNum2] &&
-        gameboardObj.gameboard[arrNum2] === gameboardObj.gameboard[arrNum3] &&
-        cells[arrNum1].textContent === 'X',
-      // check truthiness of winning combo with O
-      gameboardObj.gameboard[arrNum1] === gameboardObj.gameboard[arrNum2] &&
-        gameboardObj.gameboard[arrNum2] === gameboardObj.gameboard[arrNum3] &&
-        cells[arrNum1].textContent === 'O',
+        gameboardObj.gameboard[arrNum2] === gameboardObj.gameboard[arrNum3],
     ];
 
-    if (winningConditions[0] === true) {
+    if (winningConditions[0] === true && cells[arrNum1].textContent === 'X') {
+      // check truthiness of winning combo with X
       gameboardObj.winningMark = 'X';
       console.log('this worked');
       return winningConditions[0];
-    } else if (winningConditions[1] === true) {
+    } else if (
+      // check truthiness of winning combo with O
+      winningConditions[0] === true &&
+      cells[arrNum1].textContent === 'O'
+    ) {
       gameboardObj.winningMark = 'O';
       console.log('this worked too!!');
-      return winningConditions[1];
+      return winningConditions[0];
     }
   },
-  turn: 0,
+
   getCurrentTurn: () => {
     if (gameboardObj.turn % 2 !== 0) {
       return playerTwo.playerName;
@@ -39,6 +35,9 @@ const gameboardObj = {
       return playerOne.playerName;
     }
   },
+
+  // set initial game conditions
+  turn: 0,
   gameover: false,
   playerOneWin: false,
   playerTwoWin: false,
@@ -55,12 +54,12 @@ const gameboardObj = {
     }
 
     gameboardObj.gameover = true;
-
     // change background color of the winning combination cells
     cells[cellOne].style.backgroundColor = 'gray';
     cells[cellTwo].style.backgroundColor = 'gray';
     cells[cellThree].style.backgroundColor = 'gray';
   },
+
   winningCombos: [
     [0, 1, 2],
     [3, 4, 5],
@@ -71,6 +70,7 @@ const gameboardObj = {
     [0, 4, 8],
     [2, 4, 6],
   ],
+
   checkWinner: () => {
     // iterate through array of winningCombos to find truthiness of each combo
     for (let i = 0; i <= 7; i++) {
@@ -139,10 +139,8 @@ for (let i = 0; i < cells.length; i++) {
         gameboardObj.gameboard[i] = 'O';
         gameboardObj.turn++;
       }
-
       gameboardObj.checkWinner();
     }
-
     // announce winner
   });
 }
