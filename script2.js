@@ -153,15 +153,17 @@ const playerFactory = (playerName, mark) => {
 const playerOne = playerFactory('player1', 'X');
 const playerTwo = playerFactory('player2', 'O');
 
-/* pseudocode
+/*
 
-display message to the winner of the game
 
-function to check if there is a tie
 
-Add elements to allow 2 players to enter their names
 
-optional:  create AI opponent and allow user to choose to play against AI or 
-another player
+getCurrentTurn()
+
+
+playerfactory ()
+
+event loop
+
 
 */
