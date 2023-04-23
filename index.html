@@ -10,18 +10,57 @@
   <body>
     <div id="header">Tic Tac Toe</div>
     <div id="main">
-      <div id="game-container">
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
-        <div class="cell"></div>
+      <div id="new-game-container">
+        <div class="player-inputs">
+          <label for="player1">X: </label>
+          <input
+            class="input-field"
+            type="text"
+            id="player-1"
+            placeholder="Player 1"
+          />
+          <label for="player-2">O: </label>
+          <input
+            class="input-field"
+            type="text"
+            id="player-2"
+            placeholder="Player 2"
+          />
+        </div>
+        <button id="start-btn" type="button">New Game</button>
       </div>
-      <button id="reset-btn">Reset</button>
+      <div id="game-container">
+        <div id="grid-container">
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+          <button class="cell"></button>
+        </div>
+
+        <div id="stats-container">
+          <div class="stats"></div>
+          <div class="stats">Wins</div>
+          <div>
+            <div class="stats">X:</div>
+            <span id="mark-X">Player One</span>
+          </div>
+          <div class="stats">0</div>
+          <div>
+            <div class="stats">O:</div>
+            <span id="mark-O">Player Two</span>
+          </div>
+          <div class="stats">0</div>
+        </div>
+        <div class="restart-btns">
+          <button id="new-round">New Round</button>
+          <button id="new-game">New Game</button>
+        </div>
+      </div>
     </div>
     <div id="footer">
       Made by Kuni <a href="https://github.com/kuneus">@Kuneus</a>

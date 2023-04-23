@@ -1,5 +1,4 @@
 const cells = document.getElementsByClassName('cell');
-const resetBtn = document.getElementById('reset-btn');
 
 const playGame = () => {
   // initial game conditions
@@ -137,21 +136,62 @@ const playGame = () => {
 let play = playGame();
 
 for (let i = 0; i < cells.length; i++) {
+  // call playGame function with click of each cell
   cells[i].addEventListener('click', function () {
     play.onClick(i);
   });
+  // add hover effect for each cell
+  cells[i].addEventListener('mouseover', function () {
+    cells[i].style.backgroundColor = 'gray';
+  });
+  cells[i].addEventListener('mouseout', function () {
+    cells[i].style.backgroundColor = '';
+  });
 }
-
-resetBtn.addEventListener('click', () => {
-  play.resetGame();
-});
 
 const playerFactory = (playerName, mark) => {
   return { playerName, mark };
 };
 
-const playerOne = playerFactory('player1', 'X');
-const playerTwo = playerFactory('player2', 'O');
+const newRound = document.getElementById('new-round');
+const newGame = document.getElementById('new-game');
+const playerOneInput = document.getElementById('player-1');
+const playerTwoInput = document.getElementById('player-2');
+const displayPlayerOne = document.getElementById('mark-X');
+const displayPlayerTwo = document.getElementById('mark-O');
+const startBtn = document.getElementById('start-btn');
+const newGameContainer = document.getElementById('new-game-container');
+const gameContainer = document.getElementById('game-container');
+
+startBtn.addEventListener('click', () => {
+  if (playerOneInput.value === '') {
+    playerOneInput.value = 'Player One';
+  }
+
+  if (playerTwoInput.value === '') {
+    playerTwoInput.value = 'Player Two';
+  }
+
+  const playerOne = playerFactory(`${playerOneInput.value}`, 'X');
+  const playerTwo = playerFactory(`${playerTwoInput.value}`, 'O');
+  newGameContainer.style.display = 'none';
+  gameContainer.style.display = 'flex';
+  gameContainer.style.flexDirection = 'column';
+  displayPlayerOne.textContent = playerOneInput.value;
+  displayPlayerTwo.textContent = playerTwoInput.value;
+  playerOneInput.value = '';
+  playerTwoInput.value = '';
+});
+
+newRound.addEventListener('click', () => {
+  play.resetGame();
+});
+
+newGame.addEventListener('click', () => {
+  play.resetGame();
+  newGameContainer.style.display = 'flex';
+  gameContainer.style.display = 'none';
+});
 
 /* pseudocode
 
