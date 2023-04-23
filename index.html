@@ -8,8 +8,12 @@
     <title>Tic-Tac-Toe</title>
   </head>
   <body>
+    <!-- **** HEADER **** -->
     <div id="header">Tic Tac Toe</div>
+
+    <!-- **** MAIN **** -->
     <div id="main">
+      <!-- **** INTRO DISPLAY **** -->
       <div id="new-game-container">
         <div class="player-inputs">
           <label for="player1">X: </label>
@@ -29,7 +33,10 @@
         </div>
         <button id="start-btn" type="button" class="game-btns">New Game</button>
       </div>
+
+      <!-- **** GAME DISPLAY **** -->
       <div id="game-container">
+        <!-- **** TIC TAC TOE CELLS **** -->
         <div id="grid-container">
           <button class="cell"></button>
           <button class="cell"></button>
@@ -42,6 +49,7 @@
           <button class="cell"></button>
         </div>
 
+        <!-- **** GAME INFO **** -->
         <div class="game-container-bottom">
           <div id="stats-container">
             <div class="stats"></div>
@@ -62,9 +70,16 @@
             <button id="new-game" class="game-btns">New Game</button>
           </div>
         </div>
+
+        <!-- **** ANNOUNCE ROUND WINNER OR TIE **** -->
         <div id="announce-winner-container"></div>
+        <button id="switch-markers" type="button" class="game-btns">
+          Switch Markers
+        </button>
       </div>
     </div>
+
+    <!-- **** FOOTER **** -->
     <div id="footer">
       Made by Kuni <a href="https://github.com/kuneus">@Kuneus</a>
     </div>

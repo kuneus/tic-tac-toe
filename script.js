@@ -1,4 +1,7 @@
 const cells = document.getElementsByClassName('cell');
+const playerFactory = (playerName, mark) => {
+  return { playerName, mark };
+};
 
 const playGame = () => {
   // set initial game conditions
@@ -30,17 +33,26 @@ const playGame = () => {
 
   // identify player turn by highlighting name
   const getCurrentTurn = () => {
-    if (turn % 2 !== 0) {
+    // turn off highlight if gameover or when all cells occupied
+    if (turn === 9 || gameover === true) {
+      highlightO.style.border = 'none';
+      highlightO.style.boxShadow = 'none';
+      highlightX.style.border = 'none';
+      highlightX.style.boxShadow = 'none';
+      switchBtn.style.display = 'initial';
+    } else if (turn % 2 !== 0) {
       highlightO.style.border = 'solid 1px var(--highlight-name)';
       highlightO.style.boxShadow = '0px 0px 10px var(--highlight-name)';
       highlightX.style.border = 'none';
       highlightX.style.boxShadow = 'none';
+      switchBtn.style.display = 'none';
       // return playerTwo.playerName;
     } else if (turn % 2 === 0) {
       highlightX.style.border = 'solid 1px var(--highlight-name)';
       highlightX.style.boxShadow = '0px 0px 10px var(--highlight-name)';
       highlightO.style.border = 'none';
       highlightO.style.boxShadow = 'none';
+      switchBtn.style.display = 'none';
       // return playerOne.playerName;
     }
   };
@@ -73,13 +85,11 @@ const playGame = () => {
       playerOneWin = true;
       playerOneWinCount++;
       xWinDisplay.textContent = playerOneWinCount;
-      console.log('Player 1 wins!!!11!');
       announceWinner.textContent = `${playerOneInput.value} wins the round!`;
     } else if (mark === 'O') {
       playerTwoWin = true;
       playerTwoWinCount++;
       oWinDisplay.textContent = playerTwoWinCount;
-      console.log('Player 2 wins!!!11!');
       announceWinner.textContent = `${playerTwoInput.value} wins the round!`;
     }
 
@@ -144,9 +154,9 @@ const playGame = () => {
   };
 
   const onClick = (i) => {
-    // to prevent clicking on occupied cell, or pause the game if a winner
-    // has been declared or all cells are occupied
     if (cells[i].textContent !== '' || gameover === true || turn === 9) {
+      // to prevent repeated clicking on cell, or pause the game
+      // if a winner has been declared or all cells are occupied
       return;
     } else {
       if (turn % 2 === 0) {
@@ -163,6 +173,7 @@ const playGame = () => {
       checkWinner();
       getCurrentTurn();
 
+      // announce tie game
       if (turn === 9 && playerOneWin === false && playerTwoWin === false) {
         gameover = true;
         announceWinner.textContent = 'Tie! Try again.';
@@ -170,12 +181,37 @@ const playGame = () => {
     }
   };
 
+  const switchMarkers = () => {
+    let playerOne = playerFactory(`${playerOneInput.value}`, 'X');
+    let playerTwo = playerFactory(`${playerTwoInput.value}`, 'O');
+    let newPlayerOneWinCount = playerOneWinCount;
+    let newPlayerTwoWinCount = playerTwoWinCount;
+    playerOne.mark = 'O';
+    playerTwo.mark = 'X';
+
+    displayPlayerOne.textContent = playerTwo.playerName;
+    displayPlayerTwo.textContent = playerOne.playerName;
+    xWinDisplay.textContent = newPlayerTwoWinCount;
+    oWinDisplay.textContent = newPlayerOneWinCount;
+    playerOneWinCount = newPlayerTwoWinCount;
+    playerTwoWinCount = newPlayerOneWinCount;
+    playerOneInput.value = playerTwo.playerName;
+    playerTwoInput.value = playerOne.playerName;
+  };
+
   // no purpose yet
   const getFinalConditions = () => {
     return { playerOneWin, playerTwoWin, turn, gameover, winningMark };
   };
 
-  return { onClick, resetGame, getFinalConditions, getCurrentTurn, resetScore };
+  return {
+    onClick,
+    resetGame,
+    getFinalConditions,
+    getCurrentTurn,
+    resetScore,
+    switchMarkers,
+  };
 };
 
 let play = playGame();
@@ -197,10 +233,6 @@ for (let i = 0; i < cells.length; i++) {
   });
 }
 
-const playerFactory = (playerName, mark) => {
-  return { playerName, mark };
-};
-
 const newRound = document.getElementById('new-round');
 const newGame = document.getElementById('new-game');
 const playerOneInput = document.getElementById('player-1');
@@ -213,6 +245,7 @@ const highlightO = document.getElementById('highlight-O');
 const startBtn = document.getElementById('start-btn');
 const newGameContainer = document.getElementById('new-game-container');
 const gameContainer = document.getElementById('game-container');
+const switchBtn = document.getElementById('switch-markers');
 
 // exit introduction display and transition to game display
 startBtn.addEventListener('click', () => {
@@ -241,6 +274,12 @@ startBtn.addEventListener('click', () => {
 newRound.addEventListener('click', () => {
   play.resetGame();
   play.getCurrentTurn();
+  switchBtn.style.display = 'initial';
+});
+
+// allow players to switch markers while keeping score the same
+switchBtn.addEventListener('click', () => {
+  play.switchMarkers();
 });
 
 // exit back to intro display and resets the game and score
@@ -254,6 +293,10 @@ newGame.addEventListener('click', () => {
 });
 
 /* pseudocode
+
+display message to the winner of the game
+
+function to check if there is a tie
 
 add button to switch markers after a game is completed
 

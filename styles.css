@@ -126,11 +126,12 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 50vw;
+  width: 100%;
   justify-content: center;
   align-items: center;
 }
 
+/* INTRO DISPLAY */
 #new-game-container {
   display: flex;
   flex-direction: column;
@@ -180,14 +181,17 @@ body {
   background-color: var(--cyber-pink);
 }
 
+/* GAME DISPLAY */
 #game-container {
   display: none;
   height: clamp(600px, 35vw, 800px);
   width: clamp(400px, 35vw, 800px);
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
+/* TIC TAC TOE CONTAINER */
 #grid-container {
   display: grid;
   grid-template: 1fr 1fr 1fr/ 1fr 1fr 1fr;
@@ -210,6 +214,7 @@ body {
   cursor: pointer;
 }
 
+/* GAME INFO */
 .game-container-bottom {
   display: flex;
   align-items: center;
@@ -247,6 +252,7 @@ body {
   gap: 10px;
 }
 
+/* HIDDEN CONTAINER TO ANNOUNCE ROUND WINNER */
 #announce-winner-container {
   height: 100px;
   width: 100%;
@@ -257,6 +263,14 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+}
+
+#switch-markers {
+  width: 150px;
+  height: 30px;
+  display: none;
+  position: absolute;
+  bottom: -20px;
 }
 
 #footer {
