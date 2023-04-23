@@ -181,6 +181,10 @@ body {
   display: inline-block;
 }
 
+.restart-btns {
+  padding-top: 10px;
+}
+
 #footer {
   text-align: center;
 }

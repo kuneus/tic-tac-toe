@@ -7,6 +7,11 @@ const playGame = () => {
   let playerOneWin = false;
   let playerTwoWin = false;
   let winningMark = null;
+  let playerOneWinCount = 0;
+  let playerTwoWinCount = 0;
+
+  const xWinDisplay = document.getElementById('player-1-wincount');
+  const oWinDisplay = document.getElementById('player-2-wincount');
 
   let gameboard = [null, null, null, null, null, null, null, null, null];
   let winningCombos = [
@@ -19,6 +24,18 @@ const playGame = () => {
     [0, 4, 8],
     [2, 4, 6],
   ];
+
+  const getCurrentTurn = () => {
+    if (turn % 2 !== 0) {
+      highlightO.style.backgroundColor = 'blue';
+      highlightX.style.backgroundColor = 'black';
+      // return playerTwo.playerName;
+    } else if (turn % 2 === 0) {
+      highlightX.style.backgroundColor = 'blue';
+      highlightO.style.backgroundColor = 'black';
+      // return playerOne.playerName;
+    }
+  };
 
   const setWinningConditions = (arrNum1, arrNum2, arrNum3) => {
     // array is defined and returned in order to evaluate
@@ -45,9 +62,13 @@ const playGame = () => {
   const setPlayerWin = (cellOne, cellTwo, cellThree, mark) => {
     if (mark === 'X') {
       playerOneWin = true;
+      playerOneWinCount++;
+      xWinDisplay.textContent = playerOneWinCount;
       console.log('Player 1 wins!!!11!');
     } else if (mark === 'O') {
       playerTwoWin = true;
+      playerTwoWinCount++;
+      oWinDisplay.textContent = playerTwoWinCount;
       console.log('Player 2 wins!!!11!');
     }
 
@@ -95,6 +116,12 @@ const playGame = () => {
     playerTwoWin = false;
     winningMark = null;
   };
+  const resetScore = () => {
+    playerOneWinCount = 0;
+    playerTwoWinCount = 0;
+    xWinDisplay.textContent = playerOneWinCount;
+    oWinDisplay.textContent = playerOneWinCount;
+  };
 
   const onClick = (i) => {
     // to prevent clicking on a cell more than once, or pause the game if a winner
@@ -114,23 +141,16 @@ const playGame = () => {
         turn++;
       }
       checkWinner();
+      getCurrentTurn();
     }
     // announce winner
-  };
-
-  const getCurrentTurn = () => {
-    if (turn % 2 !== 0) {
-      return playerTwo.playerName;
-    } else if (turn % 2 === 0) {
-      return playerOne.playerName;
-    }
   };
 
   const getFinalConditions = () => {
     return { playerOneWin, playerTwoWin, turn, gameover, winningMark };
   };
 
-  return { onClick, resetGame, getFinalConditions, getCurrentTurn };
+  return { onClick, resetGame, getFinalConditions, getCurrentTurn, resetScore };
 };
 
 let play = playGame();
@@ -142,10 +162,13 @@ for (let i = 0; i < cells.length; i++) {
   });
   // add hover effect for each cell
   cells[i].addEventListener('mouseover', function () {
-    cells[i].style.backgroundColor = 'gray';
+    if (play.getFinalConditions().gameover === false) {
+      cells[i].style.backgroundColor = 'gray';
+    }
   });
   cells[i].addEventListener('mouseout', function () {
-    cells[i].style.backgroundColor = '';
+    if (play.getFinalConditions().gameover === false)
+      cells[i].style.backgroundColor = '';
   });
 }
 
@@ -159,6 +182,8 @@ const playerOneInput = document.getElementById('player-1');
 const playerTwoInput = document.getElementById('player-2');
 const displayPlayerOne = document.getElementById('mark-X');
 const displayPlayerTwo = document.getElementById('mark-O');
+const highlightX = document.getElementById('highlight-X');
+const highlightO = document.getElementById('highlight-O');
 const startBtn = document.getElementById('start-btn');
 const newGameContainer = document.getElementById('new-game-container');
 const gameContainer = document.getElementById('game-container');
@@ -181,14 +206,19 @@ startBtn.addEventListener('click', () => {
   displayPlayerTwo.textContent = playerTwoInput.value;
   playerOneInput.value = '';
   playerTwoInput.value = '';
+
+  // highlights player X to identify turn
+  play.getCurrentTurn();
 });
 
 newRound.addEventListener('click', () => {
   play.resetGame();
+  play.getCurrentTurn();
 });
 
 newGame.addEventListener('click', () => {
   play.resetGame();
+  play.resetScore();
   newGameContainer.style.display = 'flex';
   gameContainer.style.display = 'none';
 });
