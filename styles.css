@@ -92,6 +92,15 @@ video {
   vertical-align: baseline;
 }
 
+:root {
+  --main-green: rgb(62, 255, 62);
+  --highlight-green: rgb(135, 255, 135);
+  --highlight-name: rgb(63, 255, 239);
+  --red-font-color: rgb(255, 64, 64);
+  --cyber-pink: rgb(255, 5, 138);
+  --dark-pink: rgba(79, 0, 42, 0.682);
+}
+
 body {
   background-color: black;
   color: white;
@@ -101,9 +110,16 @@ body {
 }
 
 #header {
-  font-size: 4rem;
+  font-size: clamp(20px, 5rem, 150px);
   text-align: center;
   align-self: center;
+  background: linear-gradient(
+    80deg,
+    rgb(41, 239, 1) 0%,
+    rgb(27, 213, 250) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 #main {
@@ -136,10 +152,32 @@ body {
   width: clamp(150px, 15vw, 350px);
   height: 50px;
   font-size: 2rem;
+  border-radius: 10px;
+  color: white;
+  background-color: var(--dark-pink);
+  border: solid 2px var(--cyber-pink);
+  text-indent: 10px;
 }
 
-#start-btn {
+.input-field:hover,
+.input-field:focus {
+  box-shadow: 0px 0px 20px var(--cyber-pink);
+  border: solid 3px var(--cyber-pink);
+  outline: none;
+}
+
+.game-btns {
+  background-color: var(--dark-pink);
+  border: solid 1px var(--cyber-pink);
+  box-shadow: 0px 0px 10px var(--cyber-pink);
+  height: 30px;
+  border-radius: 10px;
+  color: white;
   width: 100px;
+}
+
+.game-btns:hover {
+  background-color: var(--cyber-pink);
 }
 
 #game-container {
@@ -155,13 +193,16 @@ body {
   grid-template: 1fr 1fr 1fr/ 1fr 1fr 1fr;
   width: 100%;
   height: 100%;
+  gap: 15px;
 }
 
 .cell {
   border: solid 1px rgb(62, 255, 62);
+  box-shadow: 0px 0px 10px rgb(62, 255, 62);
   background-color: black;
   color: white;
   font-size: 4rem;
+  border-radius: 10px;
 }
 
 .cell:hover {
@@ -169,10 +210,19 @@ body {
   cursor: pointer;
 }
 
+.game-container-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 #stats-container {
   display: grid;
   grid-template: 1fr 1fr 1fr / 150px 50px;
   justify-content: center;
+  align-items: center;
+  padding-top: 10px;
 }
 
 .stats {
@@ -181,8 +231,32 @@ body {
   display: inline-block;
 }
 
+.wincount {
+  align-self: center;
+}
+
+.highlight-names {
+  padding: 0px 10px;
+  border-radius: 10px;
+}
+
 .restart-btns {
   padding-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#announce-winner-container {
+  height: 100px;
+  width: 100%;
+  border: solid 1px black;
+  color: var(--cyber-pink);
+  text-shadow: 0px 0px 10px var(--cyber-pink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
 }
 
 #footer {

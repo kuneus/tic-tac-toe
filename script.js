@@ -1,7 +1,7 @@
 const cells = document.getElementsByClassName('cell');
 
 const playGame = () => {
-  // initial game conditions
+  // set initial game conditions
   let turn = 0;
   let gameover = false;
   let playerOneWin = false;
@@ -13,7 +13,10 @@ const playGame = () => {
   const xWinDisplay = document.getElementById('player-1-wincount');
   const oWinDisplay = document.getElementById('player-2-wincount');
 
+  // gameboard array to correspond to tic tac toe tiles
   let gameboard = [null, null, null, null, null, null, null, null, null];
+
+  // array of all possible winning combinations
   let winningCombos = [
     [0, 1, 2],
     [3, 4, 5],
@@ -25,14 +28,19 @@ const playGame = () => {
     [2, 4, 6],
   ];
 
+  // identify player turn by highlighting name
   const getCurrentTurn = () => {
     if (turn % 2 !== 0) {
-      highlightO.style.backgroundColor = 'blue';
-      highlightX.style.backgroundColor = 'black';
+      highlightO.style.border = 'solid 1px var(--highlight-name)';
+      highlightO.style.boxShadow = '0px 0px 10px var(--highlight-name)';
+      highlightX.style.border = 'none';
+      highlightX.style.boxShadow = 'none';
       // return playerTwo.playerName;
     } else if (turn % 2 === 0) {
-      highlightX.style.backgroundColor = 'blue';
-      highlightO.style.backgroundColor = 'black';
+      highlightX.style.border = 'solid 1px var(--highlight-name)';
+      highlightX.style.boxShadow = '0px 0px 10px var(--highlight-name)';
+      highlightO.style.border = 'none';
+      highlightO.style.boxShadow = 'none';
       // return playerOne.playerName;
     }
   };
@@ -59,24 +67,30 @@ const playGame = () => {
     }
   };
 
+  // designate the winning player
   const setPlayerWin = (cellOne, cellTwo, cellThree, mark) => {
     if (mark === 'X') {
       playerOneWin = true;
       playerOneWinCount++;
       xWinDisplay.textContent = playerOneWinCount;
       console.log('Player 1 wins!!!11!');
+      announceWinner.textContent = `${playerOneInput.value} wins the round!`;
     } else if (mark === 'O') {
       playerTwoWin = true;
       playerTwoWinCount++;
       oWinDisplay.textContent = playerTwoWinCount;
       console.log('Player 2 wins!!!11!');
+      announceWinner.textContent = `${playerTwoInput.value} wins the round!`;
     }
 
     gameover = true;
     // change background color of the winning combination cells
-    cells[cellOne].style.backgroundColor = 'gray';
-    cells[cellTwo].style.backgroundColor = 'gray';
-    cells[cellThree].style.backgroundColor = 'gray';
+    cells[cellOne].style.backgroundColor = 'var(--highlight-green)';
+    cells[cellOne].style.color = 'var(--red-font-color)';
+    cells[cellTwo].style.backgroundColor = 'var(--highlight-green)';
+    cells[cellTwo].style.color = 'var(--red-font-color)';
+    cells[cellThree].style.backgroundColor = 'var(--highlight-green)';
+    cells[cellThree].style.color = 'var(--red-font-color)';
   };
 
   const checkWinner = () => {
@@ -109,13 +123,19 @@ const playGame = () => {
     Array.from(cells).forEach((cell) => {
       cell.textContent = '';
       cell.style.backgroundColor = 'black';
+      cell.style.color = 'white';
     });
+
+    // reset to initial round conditions but keep score
     gameover = false;
     turn = 0;
     playerOneWin = false;
     playerTwoWin = false;
     winningMark = null;
+    announceWinner.textContent = '';
   };
+
+  // reset score for a new game
   const resetScore = () => {
     playerOneWinCount = 0;
     playerTwoWinCount = 0;
@@ -124,7 +144,7 @@ const playGame = () => {
   };
 
   const onClick = (i) => {
-    // to prevent clicking on a cell more than once, or pause the game if a winner
+    // to prevent clicking on occupied cell, or pause the game if a winner
     // has been declared or all cells are occupied
     if (cells[i].textContent !== '' || gameover === true || turn === 9) {
       return;
@@ -142,10 +162,15 @@ const playGame = () => {
       }
       checkWinner();
       getCurrentTurn();
+
+      if (turn === 9 && playerOneWin === false && playerTwoWin === false) {
+        gameover = true;
+        announceWinner.textContent = 'Tie! Try again.';
+      }
     }
-    // announce winner
   };
 
+  // no purpose yet
   const getFinalConditions = () => {
     return { playerOneWin, playerTwoWin, turn, gameover, winningMark };
   };
@@ -163,7 +188,7 @@ for (let i = 0; i < cells.length; i++) {
   // add hover effect for each cell
   cells[i].addEventListener('mouseover', function () {
     if (play.getFinalConditions().gameover === false) {
-      cells[i].style.backgroundColor = 'gray';
+      cells[i].style.backgroundColor = 'var(--highlight-green)';
     }
   });
   cells[i].addEventListener('mouseout', function () {
@@ -182,12 +207,14 @@ const playerOneInput = document.getElementById('player-1');
 const playerTwoInput = document.getElementById('player-2');
 const displayPlayerOne = document.getElementById('mark-X');
 const displayPlayerTwo = document.getElementById('mark-O');
+const announceWinner = document.getElementById('announce-winner-container');
 const highlightX = document.getElementById('highlight-X');
 const highlightO = document.getElementById('highlight-O');
 const startBtn = document.getElementById('start-btn');
 const newGameContainer = document.getElementById('new-game-container');
 const gameContainer = document.getElementById('game-container');
 
+// exit introduction display and transition to game display
 startBtn.addEventListener('click', () => {
   if (playerOneInput.value === '') {
     playerOneInput.value = 'Player One';
@@ -199,37 +226,36 @@ startBtn.addEventListener('click', () => {
 
   const playerOne = playerFactory(`${playerOneInput.value}`, 'X');
   const playerTwo = playerFactory(`${playerTwoInput.value}`, 'O');
+
   newGameContainer.style.display = 'none';
   gameContainer.style.display = 'flex';
   gameContainer.style.flexDirection = 'column';
   displayPlayerOne.textContent = playerOneInput.value;
   displayPlayerTwo.textContent = playerTwoInput.value;
-  playerOneInput.value = '';
-  playerTwoInput.value = '';
 
-  // highlights player X to identify turn
+  // highlights player X to identify first turn
   play.getCurrentTurn();
 });
 
+// start a new round of TTT while keeping the score
 newRound.addEventListener('click', () => {
   play.resetGame();
   play.getCurrentTurn();
 });
 
+// exit back to intro display and resets the game and score
 newGame.addEventListener('click', () => {
   play.resetGame();
   play.resetScore();
   newGameContainer.style.display = 'flex';
   gameContainer.style.display = 'none';
+  playerOneInput.value = '';
+  playerTwoInput.value = '';
 });
 
 /* pseudocode
 
-display message to the winner of the game
-
-function to check if there is a tie
-
-Add elements to allow 2 players to enter their names
+add button to switch markers after a game is completed
 
 optional:  create AI opponent and allow user to choose to play against AI or 
 another player

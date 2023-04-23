@@ -27,7 +27,7 @@
             placeholder="Player 2"
           />
         </div>
-        <button id="start-btn" type="button">New Game</button>
+        <button id="start-btn" type="button" class="game-btns">New Game</button>
       </div>
       <div id="game-container">
         <div id="grid-container">
@@ -42,24 +42,27 @@
           <button class="cell"></button>
         </div>
 
-        <div id="stats-container">
-          <div class="stats"></div>
-          <div class="stats">Wins</div>
-          <div id="highlight-X">
-            <div class="stats">X:</div>
-            <span id="mark-X">Player One</span>
+        <div class="game-container-bottom">
+          <div id="stats-container">
+            <div class="stats"></div>
+            <div class="stats">Wins</div>
+            <div id="highlight-X" class="highlight-names">
+              <div class="stats">X:</div>
+              <span id="mark-X">Player One</span>
+            </div>
+            <div class="stats wincount" id="player-1-wincount">0</div>
+            <div id="highlight-O" class="highlight-names">
+              <div class="stats">O:</div>
+              <span id="mark-O">Player Two</span>
+            </div>
+            <div class="stats wincount" id="player-2-wincount">0</div>
           </div>
-          <div class="stats" id="player-1-wincount">0</div>
-          <div id="highlight-O">
-            <div class="stats">O:</div>
-            <span id="mark-O">Player Two</span>
+          <div class="restart-btns">
+            <button id="new-round" class="game-btns">New Round</button>
+            <button id="new-game" class="game-btns">New Game</button>
           </div>
-          <div class="stats" id="player-2-wincount">0</div>
         </div>
-        <div class="restart-btns">
-          <button id="new-round">New Round</button>
-          <button id="new-game">New Game</button>
-        </div>
+        <div id="announce-winner-container"></div>
       </div>
     </div>
     <div id="footer">
