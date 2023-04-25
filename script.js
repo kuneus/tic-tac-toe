@@ -68,6 +68,13 @@ const playGame = () => {
     } else if (turn === 0) {
       easyComputerMode = false;
     }
+
+    // announce tie game
+    if (turn === 9 && playerOneWin === false && playerTwoWin === false) {
+      // turn isn't updating
+      gameover = true;
+      announceWinner.textContent = 'Tie! Try again.';
+    }
   };
 
   const setWinningConditions = (arrNum1, arrNum2, arrNum3) => {
@@ -187,7 +194,7 @@ const playGame = () => {
       getCurrentTurn();
 
       // initiate computer's turn
-      //   **** HARD MORE:  add conditional for checking computer difficulty****
+      //   **** HARD MORE:  add conditional for checking computer difficulty ****
       if (easyComputerMode === true) {
         if (displayPlayerOne.textContent === 'COMPUTER') {
           // computer is player one
@@ -201,15 +208,6 @@ const playGame = () => {
             getComputerChoice('O');
           }, 300);
         }
-
-        checkWinner();
-        getCurrentTurn();
-      }
-
-      // announce tie game
-      if (turn === 9 && playerOneWin === false && playerTwoWin === false) {
-        gameover = true;
-        announceWinner.textContent = 'Tie! Try again.';
       }
     }
   };
@@ -261,6 +259,9 @@ const playGame = () => {
         break;
       }
     }
+
+    checkWinner();
+    getCurrentTurn();
   };
 
   // no purpose yet
@@ -325,7 +326,7 @@ startBtn.addEventListener('click', () => {
   }
 
   if (compBtn.checked) {
-    // code to input AI opponent
+    // code to initiate AI opponent
     playerTwoInput.value = 'COMPUTER';
   }
 
