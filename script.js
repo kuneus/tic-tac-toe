@@ -12,6 +12,8 @@ const playGame = () => {
   let winningMark = null;
   let playerOneWinCount = 0;
   let playerTwoWinCount = 0;
+  let easyComputerMode = false;
+  let hardComputerMode = false;
 
   const xWinDisplay = document.getElementById('player-1-wincount');
   const oWinDisplay = document.getElementById('player-2-wincount');
@@ -46,14 +48,25 @@ const playGame = () => {
       highlightX.style.border = 'none';
       highlightX.style.boxShadow = 'none';
       switchBtn.style.display = 'none';
-      // return playerTwo.playerName;
     } else if (turn % 2 === 0) {
       highlightX.style.border = 'solid 1px var(--highlight-name)';
       highlightX.style.boxShadow = '0px 0px 10px var(--highlight-name)';
       highlightO.style.border = 'none';
       highlightO.style.boxShadow = 'none';
       switchBtn.style.display = 'none';
-      // return playerOne.playerName;
+    }
+
+    // check if AI is selected during transition from intro to game display
+    if (turn === 0 && compBtn.checked) {
+      easyComputerMode = true;
+      // if computer is first turn, initiate computer choice
+      if (displayPlayerOne.textContent === 'COMPUTER') {
+        setTimeout(() => {
+          getComputerChoice('X');
+        }, 500);
+      }
+    } else if (turn === 0) {
+      easyComputerMode = false;
     }
   };
 
@@ -173,6 +186,26 @@ const playGame = () => {
       checkWinner();
       getCurrentTurn();
 
+      // initiate computer's turn
+      //   **** HARD MORE:  add conditional for checking computer difficulty****
+      if (easyComputerMode === true) {
+        if (displayPlayerOne.textContent === 'COMPUTER') {
+          // computer is player one
+          setTimeout(() => {
+            getComputerChoice('X');
+          }, 300);
+        } else if (displayPlayerTwo.textContent === 'COMPUTER') {
+          // computer is player two
+
+          setTimeout(() => {
+            getComputerChoice('O');
+          }, 300);
+        }
+
+        checkWinner();
+        getCurrentTurn();
+      }
+
       // announce tie game
       if (turn === 9 && playerOneWin === false && playerTwoWin === false) {
         gameover = true;
@@ -181,6 +214,7 @@ const playGame = () => {
     }
   };
 
+  // switch markers between players and carry over score
   const switchMarkers = () => {
     let playerOne = playerFactory(`${playerOneInput.value}`, 'X');
     let playerTwo = playerFactory(`${playerTwoInput.value}`, 'O');
@@ -197,6 +231,36 @@ const playGame = () => {
     playerTwoWinCount = newPlayerOneWinCount;
     playerOneInput.value = playerTwo.playerName;
     playerTwoInput.value = playerOne.playerName;
+
+    resetGame();
+    getCurrentTurn();
+  };
+
+  // retrieve random index from array for easy computer choice
+  const computerEasy = (arr) => {
+    return arr[Math.floor(Math.random() * arr.length)];
+  };
+
+  // computer turn
+  // **** HARD MORE:  switch computerEasy function invocation below to hard mode function ***
+  const getComputerChoice = (mark) => {
+    let cellArray = Array.from(cells);
+
+    for (let i = 0; i < 100; i++) {
+      let computerCellChoice = computerEasy(cellArray);
+      // Continue to next iteration if current cell is occupied until open cell is identified.
+      if (computerCellChoice.textContent !== '') {
+        continue;
+      } else if (gameover === true || turn === 9) {
+        break;
+      } else if (computerCellChoice.textContent === '') {
+        computerCellChoice.textContent = mark;
+        let cellIndex = cellArray.indexOf(computerCellChoice);
+        gameboard[cellIndex] = mark;
+        turn++;
+        break;
+      }
+    }
   };
 
   // no purpose yet
@@ -211,6 +275,7 @@ const playGame = () => {
     getCurrentTurn,
     resetScore,
     switchMarkers,
+    getComputerChoice,
   };
 };
 
@@ -221,6 +286,7 @@ for (let i = 0; i < cells.length; i++) {
   cells[i].addEventListener('click', function () {
     play.onClick(i);
   });
+
   // add hover effect for each cell
   cells[i].addEventListener('mouseover', function () {
     if (play.getFinalConditions().gameover === false) {
@@ -246,6 +312,7 @@ const startBtn = document.getElementById('start-btn');
 const newGameContainer = document.getElementById('new-game-container');
 const gameContainer = document.getElementById('game-container');
 const switchBtn = document.getElementById('switch-markers');
+const compBtn = document.getElementById('computerCheck');
 
 // exit introduction display and transition to game display
 startBtn.addEventListener('click', () => {
@@ -257,8 +324,10 @@ startBtn.addEventListener('click', () => {
     playerTwoInput.value = 'Player Two';
   }
 
-  const playerOne = playerFactory(`${playerOneInput.value}`, 'X');
-  const playerTwo = playerFactory(`${playerTwoInput.value}`, 'O');
+  if (compBtn.checked) {
+    // code to input AI opponent
+    playerTwoInput.value = 'COMPUTER';
+  }
 
   newGameContainer.style.display = 'none';
   gameContainer.style.display = 'flex';
@@ -293,12 +362,6 @@ newGame.addEventListener('click', () => {
 });
 
 /* pseudocode
-
-display message to the winner of the game
-
-function to check if there is a tie
-
-add button to switch markers after a game is completed
 
 optional:  create AI opponent and allow user to choose to play against AI or 
 another player
