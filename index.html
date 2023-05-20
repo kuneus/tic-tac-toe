@@ -16,6 +16,7 @@
       <!-- **** INTRO DISPLAY **** -->
       <div id="new-game-container">
         <div class="player-inputs">
+          <!-- **** INPUT FOR 'X' PLAYER **** -->
           <label for="player1">X: </label>
           <input
             class="input-field"
@@ -23,6 +24,7 @@
             id="player-1"
             placeholder="Player 1"
           />
+          <!-- **** INPUT FOR 'O' PLAYER **** -->
           <label for="player-2">O: </label>
           <input
             class="input-field"
@@ -31,14 +33,14 @@
             placeholder="Player 2"
           />
         </div>
+        <!-- **** INPUT FOR AI MODE **** -->
         <div class="computerCheckContainer">
-          <label for="computerCheck">A.I.</label>
-          <input
-            type="checkbox"
-            id="computerCheck"
-            name="computerCheck"
-            value="computer"
-          />
+          <label for="computer-mode">AI opponent:</label>
+          <select name="computer-mode" id="computer-mode">
+            <option value="none" selected>None</option>
+            <option value="easy">Easy</option>
+            <option value="hard">Hard</option>
+          </select>
         </div>
         <button id="start-btn" type="button" class="game-btns">New Game</button>
       </div>
